@@ -6,6 +6,8 @@
 
 **결과.** DACON private 리더보드 점수 0.6251(58위, 상위 25%). 내부 2만 건 표본에서는 CatBoost + LR + MLP 스태킹이 weighted F1 0.8936을 기록했습니다. 항상 E로 예측하면 0.7026입니다.
 
+**역할.** 이 저장소의 코드·분석·문서를 직접 작성했습니다.
+
 **범위.** 내부 F1과 리더보드 점수는 데이터와 채점 방식이 다르고, 표본을 고객이 아닌 행 단위로 뽑아 한 고객이 학습·평가 양쪽에 들어갈 수 있습니다. 데이터는 포함되어 있지 않으며, `notebooks/train_eval_20k.ipynb`에서 2만 건 비교와 출력 결과를 확인할 수 있습니다.
 
 [English](README.md) · [사례 연구](PORTFOLIO.ko.md) · [실험 요약](reports/실험요약.md)
@@ -92,3 +94,7 @@ python src\preprocess_missing_features.py
 - [포트폴리오 사례 연구](PORTFOLIO.ko.md)
 - [아키텍처](docs/ARCHITECTURE.md)
 - [실행 매니페스트](research/RUN_MANIFEST.md)
+
+## 라이선스
+
+오픈소스 라이선스 없음: 코드와 문서는 열람용으로 공개하며, 재사용하려면 허락이 필요합니다.
