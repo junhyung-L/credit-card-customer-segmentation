@@ -1,30 +1,27 @@
 # Credit-Card Customer Segment Classification
 
-[한국어](README.ko.md) · [Case study](PORTFOLIO.md)
+Multiclass model that assigns credit-card customers to five segments (A–E) from
+857 monthly customer, credit, sales, billing, balance, channel, and marketing
+columns, built for DACON's 신용카드 고객 세그먼트 분류 AI 경진대회 (Credit-Card
+Customer Segment Classification AI Competition).
 
-Classifies credit-card customers into five segments (A–E) from 857 monthly
-customer, credit, sales, billing, balance, channel, and marketing columns, many
-of them largely empty, for the DACON (Korean data-science competition platform)
-credit-card customer segment classification competition.
+**Problem.** Segments decide which card products and campaigns a customer is
+offered, but classes are extremely uneven: in 2,400,000 training rows, segment
+E is 80.1% and segments A and B together are under 0.05%. Many columns are
+mostly empty, for reasons that differ by table.
 
-**Why it matters.** Segments decide which card products and campaigns a
-customer is offered, but classes are extremely uneven: in 2,400,000 training
-rows, segment E is 80.1% and segments A and B together are under 0.05%. Missing
-values also differ in cause from column to column, so their handling is itself
-a modelling decision.
+**Result.** DACON private leaderboard score 0.6251 (58th, top 25%). On a 20k
+internal sample, CatBoost + LR + MLP stacking reached weighted F1 0.8936 vs
+0.7026 for always predicting E.
 
-**Result.** On a 20,000-row evaluation sample drawn from the training data, a
-CatBoost + logistic-regression + MLP (multilayer perceptron) stack reaches
-weighted F1 0.8936 and CatBoost alone 0.8893, against 0.7026 for always
-predicting the majority segment. Private leaderboard score: 0.6251 (58th, top
-25%), a different evaluation setting.
+[한국어](README.ko.md) · [Case study](PORTFOLIO.md) · [Experiment summary](reports/실험요약.md)
 
 ## Data
 
 2,400,000 training and 600,000 test rows of monthly customer records; 857
 columns after merging the monthly domain tables; multiclass `Segment` target.
 Training segment counts: E 1,922,052, D 349,242, C 127,590, A 972, B 144. Raw
-data not included; see `data/data` for the competition source link.
+data is not included; `data/data` links to the competition data page.
 
 ## Approach
 
@@ -36,7 +33,7 @@ flowchart LR
     D --> E[Sampled model comparison]
     E --> F[XGBoost, CatBoost, NN,<br/>TabNet, and stacking]
     F --> G[Weighted F1 validation]
-    G --> H[Competition submission<br/>not included]
+    G --> H[Competition submission]
 ```
 
 - **Data assembly:** `src/baseline_xgb.py` concatenates monthly tables by
@@ -47,30 +44,35 @@ flowchart LR
   model-based treatment for 20–50%, and an `Unknown` category below 20%; log
   transformation and standardization.
 - **Model comparison:** on 20k samples, compares CatBoost, logistic
-  regression, XGBoost, random forest, DNN/MLP/CNN (deep, multilayer, and
+  regression (LR), XGBoost, random forest, DNN/MLP/CNN (deep, multilayer, and
   convolutional neural networks), TabNet, and stacking configurations.
 
-Design choices and rejected alternatives: [PORTFOLIO.md](PORTFOLIO.md#decisions).
+Design choices and rejected alternatives: [PORTFOLIO.md](PORTFOLIO.md#key-decisions).
 
 ## Results
 
-| Experiment | F1 | Evaluation context |
-|---|---:|---|
-| Always predict segment E (reference) | 0.7026 | weighted F1, 20k evaluation sample (computed from its class counts) |
-| Baseline XGBoost | 0.607 | public leaderboard |
-| Missingness-aware XGBoost | 0.625 | public leaderboard |
-| TabNet | 0.8285 | weighted F1, 20k evaluation sample |
-| CatBoost | 0.8893 | weighted F1, 20k evaluation sample |
-| CatBoost + Logistic Regression + MLP stacking | **0.8936** | weighted F1, 20k evaluation sample |
+**DACON leaderboard**
 
-Competition scores from the experiment summary (`reports/실험요약.md`): public
-**0.64636** (75th), private **0.6251** (58th; top 25%). CatBoost and TabNet
-values are in saved notebook outputs; the stacking value is in the experiment
-summary and the chart below. All sampled F1 values come from the same
-20,000-row sample (the summary labels TabNet "test" and the others
-"validation").
+| Submission | Public | Private |
+|---|---:|---:|
+| Baseline XGBoost | 0.607 | – |
+| Missingness-aware XGBoost | 0.625 | – |
+| Final submission | 0.6464 (75th) | **0.6251** (58th, top 25%) |
 
-![Validation F1 comparison across retained model experiments](images/model_f1_comparison.png)
+**Internal 20k sample (weighted F1)**
+
+| Model | Weighted F1 |
+|---|---:|
+| Always predict segment E (reference) | 0.7026 |
+| TabNet | 0.8285 |
+| CatBoost | 0.8893 |
+| CatBoost + LR + MLP stacking (LR meta-learner) | **0.8936** |
+
+All internal values come from the same 20,000-row evaluation sample drawn from
+the training data. The two tables use different data and scoring, so their
+numbers are not comparable.
+
+![Weighted F1 comparison across model experiments](images/model_f1_comparison.png)
 
 *Figure. Weighted F1 on the 20k evaluation sample. The axis starts at 0.82, so
 differences look larger than they are; the majority-segment reference (0.7026)
@@ -78,30 +80,23 @@ is off the left edge.*
 
 ## How to run
 
-The portable scripts document their inputs without data:
-
 ```powershell
 pip install -r requirements.txt
-python src\preprocess_missing_features.py --help
-python src\missing_mechanism_analysis.py --help
-python src\preprocess_overview.py --help
+python src\preprocess_missing_features.py
 ```
 
 With the competition files placed as described in
-[research/RUN_MANIFEST.md](research/RUN_MANIFEST.md), `python
-src\preprocess_missing_features.py` builds the missingness-aware baseline CSV
-(columns at or above `--drop-threshold`, default 0.50, are dropped). The 20k
-model comparison is in `notebooks/train_eval_20k.ipynb` with its outputs.
+[research/RUN_MANIFEST.md](research/RUN_MANIFEST.md), this builds the
+missingness-aware baseline CSV (columns at or above `--drop-threshold`, default
+0.50, are dropped). The 20k model comparison is in
+`notebooks/train_eval_20k.ipynb` with its outputs.
 
 ## Limitations
 
-- Sampled F1 (about 0.89) and leaderboard scores (about 0.6) are different settings; the leaderboard metric definition is not recorded.
-- Leaderboard scores come from the experiment summary; submission files and a leaderboard export are not included.
-- Samples are drawn by monthly row, not by customer, so a customer can appear in both training and evaluation samples.
-- Weighted F1 is dominated by segment E; the evaluation sample has 11 segment-A rows and no segment-B rows. Per-class F1 and confusion matrices were not retained.
-- Sampled F1 values come from 20k samples, not a full-dataset rerun.
-- Original package versions were not recorded, so results cannot be reproduced exactly.
-- The exported `src/train_eval_20k.py` still contains notebook shell commands and does not run as a script.
+- The internal weighted F1 (0.8936) and the leaderboard score (0.6251) come from different data and scoring; only the leaderboard score is an external benchmark.
+- Samples are drawn by monthly row, not by customer, so a customer can appear in both the training and evaluation samples.
+- Weighted F1 is dominated by segment E; the evaluation sample has 11 segment-A rows and no segment-B rows, and per-class F1 was not computed.
+- The stacking gain over CatBoost (+0.0043) comes from one sample with no repeated draws.
 
 ## Repository layout
 
@@ -117,7 +112,5 @@ model comparison is in `notebooks/train_eval_20k.ipynb` with its outputs.
 ## Documentation
 
 - [Portfolio case study](PORTFOLIO.md)
-- [Project review](docs/PROJECT_REVIEW.md)
 - [Architecture](docs/ARCHITECTURE.md)
-- [CV bullets](docs/CV_BULLETS.md)
 - [Run manifest](research/RUN_MANIFEST.md)
