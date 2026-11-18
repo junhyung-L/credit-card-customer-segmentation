@@ -14,6 +14,11 @@ mostly empty, for reasons that differ by table.
 internal sample, CatBoost + LR + MLP stacking reached weighted F1 0.8936 vs
 0.7026 for always predicting E.
 
+**Scope.** Internal F1 and the leaderboard score use different data and
+scoring, and samples are drawn by row, not customer, so one customer can be on
+both sides. Data not included; `notebooks/train_eval_20k.ipynb` keeps the 20k
+comparison with its outputs.
+
 [한국어](README.ko.md) · [Case study](PORTFOLIO.md) · [Experiment summary](reports/실험요약.md)
 
 ## Data
