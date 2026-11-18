@@ -9,8 +9,12 @@ the core baseline and 20k evaluation scripts. Set the data root before running:
 $env:CCS_DATA_DIR = 'D:\path\to\credit-card-data'
 $env:CCS_ARTIFACT_DIR = 'D:\path\to\experiment-artifacts'
 python src\baseline_xgb.py
-python src\train_eval_20k.py
 ```
+
+`src\train_eval_20k.py` has resolved paths but still contains notebook shell
+commands (for example `pip install rtdl -q`), so it does not parse as a Python
+script. Use `notebooks\train_eval_20k.ipynb`, which also holds the saved
+outputs, for the 20k comparison.
 
 `CCS_DATA_DIR` must reproduce the legacy directory layout used by the original
 scripts. Optional overrides are available for `CCS_TRAIN_CSV`, `CCS_TEST_CSV`,

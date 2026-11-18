@@ -5,7 +5,8 @@
   benchmarking.
 - Compared tree, neural, tabular-deep-learning, and stacking approaches; the
   retained 20k validation summary reports weighted F1 of 0.8936 for a
-  CatBoost + logistic-regression + MLP stack.
+  CatBoost + logistic-regression + MLP stack, against 0.7026 for always
+  predicting the majority segment on the same 20k sample.
 - Documented preprocessing trade-offs for incomplete customer data, including
   rule-based filling and predictive-imputation experiments.
 
