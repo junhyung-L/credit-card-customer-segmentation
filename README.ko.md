@@ -66,7 +66,7 @@ pip install -r requirements.txt
 python src\preprocess_missing_features.py
 ```
 
-대회 파일을 [research/RUN_MANIFEST.md](research/RUN_MANIFEST.md) 설명대로 두면 결측 패턴을 반영한 기본 CSV가 만들어집니다(`--drop-threshold` 기본값 0.50 이상인 컬럼은 제거). 2만 건 모델 비교는 출력과 함께 `notebooks/train_eval_20k.ipynb`에 있습니다.
+대회 파일을 [research/RUN_MANIFEST.md](research/RUN_MANIFEST.md) 설명대로 두면 결측 패턴을 반영한 기본 CSV가 만들어집니다(`--drop-threshold` 기본값 0.50 이상인 컬럼은 제거). 2만 건 모델 비교는 출력과 함께 `notebooks/train_eval_20k.ipynb`에 있습니다. 이 노트북은 Google Colab(Python 3.11)에서 실행했고, `requirements.txt`는 노트북의 pip 출력에 남은 패키지 버전으로 고정했으며 기록이 없는 일부 패키지는 따로 표시했습니다(TabNet 실험은 로컬 Python 3.12.4 환경에서 별도로 실행).
 
 ## 한계
 

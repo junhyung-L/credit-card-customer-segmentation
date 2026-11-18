@@ -1,14 +1,20 @@
-# Import-derived list; original package versions were not recorded.
-numpy
-pandas
-pyarrow
-scikit-learn
-xgboost
-catboost
-torch
+# Versions recorded in notebooks/train_eval_20k.ipynb (Google Colab, Python 3.11), the notebook that
+# produced the 20k model comparison: pip output and explicit installs in that notebook.
+# numpy was downgraded to 1.24.3 inside that notebook (from Colab's 2.0.2) before the model runs.
+numpy==1.24.3
+pandas==2.2.2
+scipy==1.14.1
+matplotlib==3.10.0
+xgboost==2.1.4
+catboost==1.2.8
+lightgbm==4.5.0
+torch==2.0.1
+# Not recorded in the notebooks; pinned to the environment used for the 2026-11 review.
+# Original run versions were not recorded.
+scikit-learn==1.6.1
+seaborn==0.13.2
+pyarrow==23.0.1
+# Not recorded and not installed in the review environment, so left unpinned:
 pytorch-tabnet
 missingno
-matplotlib
-seaborn
-scipy
 dask

@@ -94,7 +94,10 @@ With the competition files placed as described in
 [research/RUN_MANIFEST.md](research/RUN_MANIFEST.md), this builds the
 missingness-aware baseline CSV (columns at or above `--drop-threshold`, default
 0.50, are dropped). The 20k model comparison is in
-`notebooks/train_eval_20k.ipynb` with its outputs.
+`notebooks/train_eval_20k.ipynb` with its outputs. That notebook ran on Google
+Colab (Python 3.11); `requirements.txt` pins the package versions its pip output
+records and marks the few it does not (TabNet experiments ran separately on a
+local Python 3.12.4 environment).
 
 ## Limitations
 
