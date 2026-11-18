@@ -3,7 +3,8 @@
 ## Refactored paths
 
 `src/project_config.py` replaces hard-coded Colab and local-machine paths in
-the core baseline and 20k evaluation scripts. Set the data root before running:
+the core baseline script (and in the legacy 20k export). Set the data root
+before running:
 
 ```powershell
 $env:CCS_DATA_DIR = 'D:\path\to\credit-card-data'
@@ -11,10 +12,10 @@ $env:CCS_ARTIFACT_DIR = 'D:\path\to\experiment-artifacts'
 python src\baseline_xgb.py
 ```
 
-`src\train_eval_20k.py` has resolved paths but still contains notebook shell
-commands (for example `pip install rtdl -q`), so it does not parse as a Python
-script. Use `notebooks\train_eval_20k.ipynb`, which also holds the saved
-outputs, for the 20k comparison.
+Use `notebooks\train_eval_20k.ipynb`, which also holds the saved outputs, for
+the 20k comparison. Its raw `.py` export (resolved paths, but notebook shell
+commands such as `pip install rtdl -q`) does not parse as Python and was moved
+to `legacy\notebook_exports\train_eval_20k.py` for reference.
 
 `CCS_DATA_DIR` must reproduce the legacy directory layout used by the original
 scripts. Optional overrides are available for `CCS_TRAIN_CSV`, `CCS_TEST_CSV`,
@@ -23,7 +24,7 @@ scripts. Optional overrides are available for `CCS_TRAIN_CSV`, `CCS_TEST_CSV`,
 ## Result-preservation boundary
 
 The refactor changes only file and output path resolution in
-`baseline_xgb.py` and `train_eval_20k.py`; model types, seeds, data sampling,
+`baseline_xgb.py` and the legacy `train_eval_20k.py` export; model types, seeds, data sampling,
 preprocessing expressions, and evaluation logic are unchanged. Raw data is
 unavailable, so no training or numerical equivalence check was run.
 
@@ -42,7 +43,7 @@ rtdl 0.0.13). The pinned set was not install-tested as a whole.
 
 ## Legacy exports
 
-Several `src/` files are direct notebook exports with invalid notebook-shell
-commands or damaged text encoding. They remain as evidence and are not claimed
-to be portable runnable modules. Normalize them from an authoritative UTF-8
-source before consolidating additional experiments.
+`legacy/notebook_exports/` holds the two raw notebook exports that do not parse
+as Python (`scaling_log_standard.py`, `train_eval_20k.py`). They are kept for
+reference only; the matching notebooks are the runnable source. Every file left
+under `src/` compiles with `python -m py_compile`.

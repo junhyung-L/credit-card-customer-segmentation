@@ -94,7 +94,8 @@ With the competition files placed as described in
 [research/RUN_MANIFEST.md](research/RUN_MANIFEST.md), this builds the
 missingness-aware baseline CSV (columns at or above `--drop-threshold`, default
 0.50, are dropped). The 20k model comparison is in
-`notebooks/train_eval_20k.ipynb` with its outputs. That notebook ran on Google
+`notebooks/train_eval_20k.ipynb` with its outputs (run the notebook; its raw
+`.py` export under `legacy/` does not parse). That notebook ran on Google
 Colab (Python 3.11); `requirements.txt` pins the package versions its pip output
 records and marks the few it does not (TabNet experiments ran separately on a
 local Python 3.12.4 environment).
@@ -110,8 +111,9 @@ local Python 3.12.4 environment).
 
 ```text
 .
-├── src/                         # Exported Colab preprocessing/training scripts
+├── src/                         # Exported Colab preprocessing/training scripts (all compile)
 ├── notebooks/                   # Notebooks with saved outputs (source of the results)
+├── legacy/notebook_exports/     # Raw .py exports that do not parse; reference only
 ├── reports/실험요약.md           # Experiment summary and scores
 ├── images/model_f1_comparison.png
 └── data/                        # Placeholder with the data-source link
